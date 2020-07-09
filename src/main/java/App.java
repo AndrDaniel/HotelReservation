@@ -66,6 +66,7 @@ public class App {
             Gender gender = Gender.FEMALE;
             if (genderOption == 1) {
                 gender = Gender.MALE;
+
             } else if (genderOption == 2) {
                 gender = Gender.FEMALE;
             } else {
