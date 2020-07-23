@@ -1,6 +1,9 @@
 import java.util.InputMismatchException;
 import java.util.Scanner;
 public class App {
+
+    private static TextUI textUI = new TextUI();
+
     public static void main(String[] args) {
         String hotelName = "Overlook";
         int systemVersion = 1;
@@ -21,11 +24,12 @@ public class App {
     }
     private static void performAction(Scanner input) {
         int option = getActionFromUser(input);
-      GuestService guestService = new GuestService();
+
+
         if (option == 1) {
-            Guest newGuest = guestService.createNewGuest(input);
+          textUI.readNewGuestData(input);
         } else if (option == 2) {
-            Room newRoom = createNewRoom(input);
+           textUI.readNewRoomData(input);
         } else if (option == 3) {
             System.out.println("Wybrano opcję 3.");
         } else {
@@ -52,41 +56,6 @@ public class App {
         return option;
     }
 
-    public static Room createNewRoom(Scanner input) {
-        System.out.println("Tworzymy nowy pokój.");
-        try {
-            System.out.println("Numer: ");
-            int number = input.nextInt();
-            BedType[] bedTypes = chooseBedType(input);
-            Room newRoom = new Room(number, bedTypes);
-            System.out.println(newRoom.getInfo());
-            return newRoom;
-        } catch (InputMismatchException e) {
-            throw new OnlyNumberException("Use numbers when creating new room");
-        }
-    }
-    static private BedType[] chooseBedType(Scanner input) {
-        System.out.println("Ile łóżek w pokoju?: ");
-        int bedNumber = input.nextInt();
-        BedType[] bedTypes = new BedType[bedNumber];
-        for(int i=0;i<bedNumber;i=i+1) {
-            System.out.println("Typy łóżek: ");
-            System.out.println("\t1. Pojedyncze");
-            System.out.println("\t2. Podwójne");
-            System.out.println("\t3. Królewskie");
-            BedType bedType = BedType.SINGLE;
-            int bedTypeOption = input.nextInt();
-            if (bedTypeOption == 1) {
-                bedType = BedType.SINGLE;
-            } else if (bedTypeOption == 2) {
-                bedType = BedType.DOUBLE;
-            } else if (bedTypeOption == 3) {
-                bedType = BedType.KING_SIZE;
-            } else {
-                throw new WrongOptionException("Wrong option when selecting bed type");
-            }
-            bedTypes[i] = bedType;
-        }
-        return bedTypes;
-    }
+
+
 }
