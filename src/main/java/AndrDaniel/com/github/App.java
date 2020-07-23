@@ -1,5 +1,6 @@
-import java.util.InputMismatchException;
-import java.util.Scanner;
+package AndrDaniel.com.github;
+
+import AndrDaniel.com.github.ui.tex.TextUI;
 
 public class App {
 
