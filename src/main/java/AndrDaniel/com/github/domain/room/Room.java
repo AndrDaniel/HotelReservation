@@ -12,6 +12,15 @@ public class Room {
         for(BedType bed : beds) {
             bedInfo.append("\t").append(bed).append("\n");
         }
-        return String.format("Dodano nowy pokoj - numer %d %s", this.number, bedInfo.toString());
+        return String.format("Numer: %d %s", this.number, bedInfo.toString());
+    }
+
+    String toCSV() {
+      String[] bedsAsString = new String[this.beds.length];
+        for (int i = 0; i <this.beds.length; i++) {
+            bedsAsString[i] = this.beds[i].toString();
+        }
+String bedTypes = String.join("#",bedsAsString);
+      return String.format("%d,%s%s",this.number,bedTypes,System.getProperty("line.separator"));
     }
 }
