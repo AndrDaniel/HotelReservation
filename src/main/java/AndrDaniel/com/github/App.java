@@ -1,22 +1,24 @@
 package AndrDaniel.com.github;
 
+import AndrDaniel.com.github.exceptions.PersistenceToFileException;
 import AndrDaniel.com.github.ui.tex.TextUI;
+import AndrDaniel.com.github.util.Properties;
 
-public class App {
-
-    private static TextUI textUI = new TextUI();
-
-    public static void main(String[] args) {
+import java.io.IOException;
 
 
-        String hotelName = "Overlook";
-        int systemVersion = 1;
-        boolean isDeveloperVersion = true;
 
-        textUI.showSystemInfo(hotelName, systemVersion, isDeveloperVersion);
-        textUI.showMainMenu();
 
+    public class App {
+        private static final TextUI textUI = new TextUI();
+        public static void main(String[] args) {
+            try {
+                Properties.createDataDirectory();
+            } catch (IOException e) {
+                throw new PersistenceToFileException(Properties.DATA_DIRECTORY.toString(), "create", "directory");
+            }
+            textUI.showSystemInfo();
+            textUI.showMainMenu();
+        }
     }
 
-
-}
