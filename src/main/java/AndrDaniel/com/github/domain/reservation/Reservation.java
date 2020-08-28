@@ -1,6 +1,7 @@
 package AndrDaniel.com.github.domain.reservation;
 
 import AndrDaniel.com.github.domain.guest.Guest;
+import AndrDaniel.com.github.domain.reservation.dto.ReservationDTO;
 import AndrDaniel.com.github.domain.room.Room;
 
 import java.time.LocalDateTime;
@@ -32,5 +33,9 @@ public class Reservation {
     }
     public int getId() {
         return this.id;
+    }
+
+    public ReservationDTO getAsDTO() {
+        return new ReservationDTO(this.id,this.from,this.to,this.room.getId(),this.room.getNumber(),this.guest.getId(),this.guest.getFirstName()+" "+this.guest.getLastName());
     }
 }

@@ -1,4 +1,4 @@
-package AndrDaniel.com.github.ui.tex;
+package AndrDaniel.com.github.ui.text;
 
 import AndrDaniel.com.github.domain.guest.Guest;
 import AndrDaniel.com.github.domain.guest.GuestService;
@@ -77,10 +77,7 @@ public class TextUI {
         System.out.println("\n=========================\n");
     }
     public void showMainMenu() {
-        System.out.println("Trwa ładowanie danych...");
-        this.guestService.readAll();
-        this.roomService.readAll();
-        this.reservationService.readAll();
+
         Scanner input = new Scanner(System.in);
         try {
             performAction(input);

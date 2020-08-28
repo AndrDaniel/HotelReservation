@@ -35,6 +35,9 @@ public class ReservationRepository {
         }
         return max + 1;
     }
+    List<Reservation> getAllReservations() {
+        return this.reservations;
+    }
     public void readAll() {
         String name = "reservations.csv";
         Path file = Paths.get(Properties.DATA_DIRECTORY.toString(), name);

@@ -23,7 +23,7 @@ public class GuestRepository {
         guests.add(newGuest);
         return newGuest;
     }
-    List<Guest> getAll() {
+    List<Guest> getAllGuests() {
         return this.guests;
     }
     void saveAll() {

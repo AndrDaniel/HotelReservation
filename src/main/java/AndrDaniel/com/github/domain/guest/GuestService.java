@@ -1,5 +1,8 @@
 package AndrDaniel.com.github.domain.guest;
 
+import AndrDaniel.com.github.domain.guest.dto.GuestDTO;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class GuestService {
@@ -12,7 +15,7 @@ public class GuestService {
         return repository.createNewGuest(firstName, lastName, age, gender);
     }
     public List<Guest> getAllGuests() {
-        return this.repository.getAll();
+        return this.repository.getAllGuests();
     }
     public void saveAll() {
         this.repository.saveAll();
@@ -32,5 +35,17 @@ public class GuestService {
     }
     public Guest getGuestById(int id) {
         return this.repository.findById(id);
+    }
+
+
+
+    public List<GuestDTO> getGuestsAsDTO() {
+        List<GuestDTO> result = new ArrayList<>();
+        List<Guest> allGuests = repository.getAllGuests();
+        for(Guest guest : allGuests){
+            GuestDTO dto = guest.getAsDTO();
+            result.add(dto);
+        }
+        return result;
     }
 }
