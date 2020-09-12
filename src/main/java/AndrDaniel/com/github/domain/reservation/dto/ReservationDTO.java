@@ -1,7 +1,5 @@
 package AndrDaniel.com.github.domain.reservation.dto;
 
-import AndrDaniel.com.github.domain.guest.Guest;
-import AndrDaniel.com.github.domain.room.Room;
 
 import java.time.LocalDateTime;
 

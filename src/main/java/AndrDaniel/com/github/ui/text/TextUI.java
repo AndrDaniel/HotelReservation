@@ -1,5 +1,6 @@
 package AndrDaniel.com.github.ui.text;
 
+import AndrDaniel.com.github.domain.ObjectPool;
 import AndrDaniel.com.github.domain.guest.Guest;
 import AndrDaniel.com.github.domain.guest.GuestService;
 import AndrDaniel.com.github.domain.reservation.Reservation;
@@ -17,9 +18,10 @@ import java.util.List;
 import java.util.Scanner;
 
 public class TextUI {
-    private final GuestService guestService = new GuestService();
-    private final RoomService roomService = new RoomService();
-    private final ReservationService reservationService = new ReservationService();
+    private final GuestService guestService = ObjectPool.getGuestService();
+    private final RoomService roomService = ObjectPool.getRoomService();
+    private final ReservationService reservationService = ObjectPool.getReservationService();
+
     private void readNewGuestData(Scanner input) {
         System.out.println("Tworzymy nowego gościa.");
         try {
@@ -44,6 +46,7 @@ public class TextUI {
             throw new OnlyNumberException("Use only numbers when choosing gender");
         }
     }
+
     private void readNewRoomData(Scanner input) {
         System.out.println("Tworzymy nowy pokój.");
         try {
@@ -56,6 +59,7 @@ public class TextUI {
             throw new OnlyNumberException("Use numbers when creating new room");
         }
     }
+
     private int[] chooseBedType(Scanner input) {
         System.out.println("Ile łóżek w pokoju?: ");
         int bedNumber = input.nextInt();
@@ -70,12 +74,14 @@ public class TextUI {
         }
         return bedTypes;
     }
+
     public void showSystemInfo() {
         System.out.print("Witam w systemie rezerwacji dla hotelu " + Properties.HOTEL_NAME);
         System.out.println("Aktualna wersja systemu: " + Properties.SYSTEM_VERSION);
         System.out.println("Wersja developerska: " + Properties.IS_DEVELOPER_VERSION);
         System.out.println("\n=========================\n");
     }
+
     public void showMainMenu() {
 
         Scanner input = new Scanner(System.in);
@@ -93,6 +99,7 @@ public class TextUI {
             e.printStackTrace();
         }
     }
+
     private void performAction(Scanner input) {
         int option = -1;
         while (option != 0) {
@@ -125,6 +132,7 @@ public class TextUI {
             }
         }
     }
+
     private void createReservation(Scanner input) {
         System.out.println("Od kiedy (DD.MM.YYYY):");
         String fromAsString = input.next();
@@ -137,11 +145,17 @@ public class TextUI {
         System.out.println("ID Gościa:");
         int guestId = input.nextInt();
         //TODO Handle null reservation?
-        Reservation res = this.reservationService.createNewReservation(from,to,roomId,guestId);
-        if(res!=null) {
-            System.out.println("Udało się stworzyć rezerwację");
+        try{
+            Reservation res = this.reservationService.createNewReservation(from, to, roomId, guestId);
+            if (res != null) {
+                System.out.println("Udało się stworzyć rezerwację");
+            }
+        }catch(IllegalArgumentException ex){
+            System.out.println("Data zakończenia rezerwacji, nie może być wcześniejsza niż data jej rozpoczęcia");
         }
+
     }
+
     private void editRoom(Scanner input) {
         System.out.println("Podaj ID pokoju do edycji");
         try {
@@ -154,6 +168,7 @@ public class TextUI {
             throw new OnlyNumberException("Use numbers when editing room");
         }
     }
+
     private void removeRoom(Scanner input) {
         System.out.println("Podaj ID pokoju do usunięcia");
         try {
@@ -163,6 +178,7 @@ public class TextUI {
             throw new OnlyNumberException("Use numbers when inserting ID");
         }
     }
+
     private void editGuest(Scanner input) {
         System.out.println("Podaj ID gościa do edycji");
         try {
@@ -187,6 +203,7 @@ public class TextUI {
             throw new OnlyNumberException("Use numbers when editing guest");
         }
     }
+
     private void removeGuest(Scanner input) {
         System.out.println("Podaj ID gościa do usunięcia");
         try {
@@ -196,18 +213,21 @@ public class TextUI {
             throw new OnlyNumberException("Use numbers when inserting ID");
         }
     }
+
     private void showAllRooms() {
         List<Room> rooms = this.roomService.getAllRooms();
         for (Room room : rooms) {
             System.out.println(room.getInfo());
         }
     }
+
     private void showAllGuests() {
         List<Guest> guests = this.guestService.getAllGuests();
         for (Guest guest : guests) {
             System.out.println(guest.getInfo());
         }
     }
+
     private static int getActionFromUser(Scanner in) {
         System.out.println("1 - Dodaj nowego gościa.");
         System.out.println("2 - Dodaj nowy pokój.");

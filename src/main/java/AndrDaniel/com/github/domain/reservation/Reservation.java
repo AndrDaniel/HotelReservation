@@ -24,11 +24,12 @@ public class Reservation {
         this.to = to;
     }
     String toCSV() {
-        return String.format("%s,%s,%s,%d,%s%s",
-                this.room,
-                this.guest,
-                this.from,
-                this.to,
+        return String.format("%s,%s,%s,%s,%s%s",
+                this.id,
+                this.room.getId(),
+                this.guest.getId(),
+                this.from.toString(),
+                this.to.toString(),
                 System.getProperty("line.separator"));
     }
     public int getId() {
@@ -36,6 +37,9 @@ public class Reservation {
     }
 
     public ReservationDTO getAsDTO() {
-        return new ReservationDTO(this.id,this.from,this.to,this.room.getId(),this.room.getNumber(),this.guest.getId(),this.guest.getFirstName()+" "+this.guest.getLastName());
+        return new ReservationDTO(this.id,this.from,
+                this.to,this.room.getId(),
+                this.room.getNumber(),this.guest.getId(),
+                this.guest.getFirstName()+" "+this.guest.getLastName());
     }
 }

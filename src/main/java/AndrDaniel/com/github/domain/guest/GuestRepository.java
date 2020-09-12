@@ -13,19 +13,32 @@ import java.util.List;
 
 public class GuestRepository {
     private final List<Guest> guests = new ArrayList<>();
+
+    private final static GuestRepository instance = new GuestRepository();
+
+    private GuestRepository() {
+    }
+
+    public static GuestRepository getInstance() {
+        return instance;
+    }
+
     Guest createNewGuest(String firstName, String lastName, int age, Gender gender) {
         Guest newGuest = new Guest(findNewId(), firstName, lastName, age, gender);
         guests.add(newGuest);
         return newGuest;
     }
+
     Guest addExistingGuest(int id, String firstName, String lastName, int age, Gender gender) {
         Guest newGuest = new Guest(id, firstName, lastName, age, gender);
         guests.add(newGuest);
         return newGuest;
     }
+
     List<Guest> getAllGuests() {
         return this.guests;
     }
+
     void saveAll() {
         String name = "guests.csv";
         Path file = Paths.get(Properties.DATA_DIRECTORY.toString(), name);
@@ -39,10 +52,11 @@ public class GuestRepository {
             throw new PersistenceToFileException(file.toString(), "write", "guests data");
         }
     }
+
     void readAll() {
         String name = "guests.csv";
         Path file = Paths.get(Properties.DATA_DIRECTORY.toString(), name);
-        if(!Files.exists(file)) {
+        if (!Files.exists(file)) {
             return;
         }
         try {
@@ -59,6 +73,7 @@ public class GuestRepository {
             throw new PersistenceToFileException(file.toString(), "read", "guests data");
         }
     }
+
     private int findNewId() {
         int max = 0;
         for (Guest guest : this.guests) {
@@ -68,25 +83,28 @@ public class GuestRepository {
         }
         return max + 1;
     }
+
     public void remove(int id) {
         int guestToBeRemovedIndex = -1;
-        for(int i=0;i<this.guests.size();i++) {
-            if(this.guests.get(i).getId() == id) {
+        for (int i = 0; i < this.guests.size(); i++) {
+            if (this.guests.get(i).getId() == id) {
                 guestToBeRemovedIndex = i;
                 break;
             }
         }
-        if(guestToBeRemovedIndex>-1) {
+        if (guestToBeRemovedIndex > -1) {
             this.guests.remove(guestToBeRemovedIndex);
         }
     }
+
     public void edit(int id, String firstName, String lastName, int age, Gender gender) {
         this.remove(id);
-        this.addExistingGuest(id,firstName,lastName,age,gender);
+        this.addExistingGuest(id, firstName, lastName, age, gender);
     }
+
     public Guest findById(int id) {
-        for(Guest guest : this.guests) {
-            if(guest.getId()==id) {
+        for (Guest guest : this.guests) {
+            if (guest.getId() == id) {
                 return guest;
             }
         }

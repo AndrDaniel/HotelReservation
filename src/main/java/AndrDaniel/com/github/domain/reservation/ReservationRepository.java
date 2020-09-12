@@ -1,6 +1,6 @@
 package AndrDaniel.com.github.domain.reservation;
 
-import AndrDaniel.com.github.domain.guest.Gender;
+import AndrDaniel.com.github.domain.ObjectPool;
 import AndrDaniel.com.github.domain.guest.Guest;
 import AndrDaniel.com.github.domain.guest.GuestService;
 import AndrDaniel.com.github.domain.room.Room;
@@ -18,14 +18,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReservationRepository {
+
     List<Reservation> reservations = new ArrayList<>();
-    RoomService roomService = new RoomService();
-    GuestService guestService = new GuestService();
+    RoomService roomService = ObjectPool.getRoomService();
+    GuestService guestService = ObjectPool.getGuestService();
+
+    private final static ReservationRepository instance = new ReservationRepository();
+
+    private ReservationRepository() {
+
+    }
+
+    public static ReservationRepository getInstance() {
+        return instance;
+    }
+
     public Reservation createNewReservation(Room room, Guest guest, LocalDateTime from, LocalDateTime to) {
         Reservation res = new Reservation(findNewId(), room, guest, from, to);
         this.reservations.add(res);
         return res;
     }
+
+
     private int findNewId() {
         int max = 0;
         for (Reservation reservation : this.reservations) {
@@ -35,18 +49,20 @@ public class ReservationRepository {
         }
         return max + 1;
     }
-    List<Reservation> getAllReservations() {
-        return this.reservations;
-    }
+
     public void readAll() {
         String name = "reservations.csv";
+
         Path file = Paths.get(Properties.DATA_DIRECTORY.toString(), name);
+
         if(!Files.exists(file)) {
             return;
         }
+
         try {
             String data = Files.readString(file, StandardCharsets.UTF_8);
             String[] reservationsAsString = data.split(System.getProperty("line.separator"));
+
             for (String reservationAsString : reservationsAsString) {
                 String[] reservationData = reservationAsString.split(",");
                 int id = Integer.parseInt(reservationData[0]);
@@ -55,28 +71,38 @@ public class ReservationRepository {
                 String fromAsString = reservationData[3];
                 String toAsString = reservationData[4];
                 //TODO handle null guest/room
-
                 addExistingReservation(id, this.roomService.getRoomById(roomId), this.guestService.getGuestById(guestId), LocalDateTime.parse(fromAsString), LocalDateTime.parse(toAsString));
             }
+
         } catch (IOException e) {
             throw new PersistenceToFileException(file.toString(), "read", "guests data");
         }
     }
+
     private void addExistingReservation(int id, Room room, Guest guest, LocalDateTime from, LocalDateTime to) {
         Reservation res = new Reservation(id, room, guest, from, to);
         this.reservations.add(res);
     }
+
     public void saveAll() {
         String name = "reservations.csv";
+
         Path file = Paths.get(Properties.DATA_DIRECTORY.toString(), name);
+
         StringBuilder sb = new StringBuilder("");
+
         for (Reservation reservation : this.reservations) {
             sb.append(reservation.toCSV());
         }
+
         try {
             Files.writeString(file, sb.toString(), StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new PersistenceToFileException(file.toString(), "write", "reservation data");
         }
+    }
+
+    public List<Reservation> getAll() {
+        return this.reservations;
     }
 }

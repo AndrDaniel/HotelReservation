@@ -1,8 +1,6 @@
 package AndrDaniel.com.github.domain.guest.dto;
 
 
-import AndrDaniel.com.github.domain.guest.Gender;
-
 public class GuestDTO {
     private int id;
     private String firstName;
